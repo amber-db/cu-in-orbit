@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Telescope, ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const CtaSection = () => {
+  const navigate = useNavigate();
   return (
     <section className="py-28 relative overflow-hidden">
       {/* Glows */}
@@ -46,11 +48,11 @@ export const CtaSection = () => {
             through the cosmos of knowledge.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="cosmos" size="lg">
+            <Button variant="cosmos" size="lg" onClick={() => navigate("/courses")}>
               Begin Free Assessment
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
-            <Button variant="cosmosOutline" size="lg">
+            <Button variant="cosmosOutline" size="lg" onClick={() => navigate("/courses")}>
               Watch Demo
             </Button>
           </div>
