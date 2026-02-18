@@ -15,6 +15,9 @@ const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        cosmos: "bg-cosmos-cyan text-background font-semibold hover:opacity-90 transition-all duration-200 hover:shadow-[0_0_25px_hsl(191_97%_55%/0.4)]",
+        cosmosOutline: "border border-cosmos-cyan/40 text-cosmos-cyan bg-cosmos-cyan/5 hover:bg-cosmos-cyan/10 hover:border-cosmos-cyan/70 transition-all duration-200",
+        cosmosGold: "bg-cosmos-gold text-background font-semibold hover:opacity-90 transition-all duration-200 hover:shadow-[0_0_25px_hsl(43_96%_56%/0.4)]",
       },
       size: {
         default: "h-10 px-4 py-2",
