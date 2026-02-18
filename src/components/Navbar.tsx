@@ -1,13 +1,15 @@
-import { Orbit } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
 
 const navLinks = [
   { label: "Features", href: "#features" },
   { label: "How It Works", href: "#path" },
-  { label: "For Teachers", href: "#teachers" },
+  { label: "Courses", href: "/courses", isRoute: true },
   { label: "About", href: "#about" },
 ];
 
 export const Navbar = () => {
+  const navigate = useNavigate();
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4"
       style={{
@@ -17,7 +19,7 @@ export const Navbar = () => {
       }}
     >
       {/* Logo */}
-      <div className="flex items-center gap-2">
+      <Link to="/" className="flex items-center gap-2">
         <div
           className="w-8 h-8 rounded-full flex items-center justify-center"
           style={{ background: "radial-gradient(circle at 35% 35%, hsl(191 97% 70%), hsl(191 97% 40%))" }}
@@ -27,19 +29,29 @@ export const Navbar = () => {
         <span className="font-display font-bold text-xl text-foreground tracking-tight">
           Orbit
         </span>
-      </div>
+      </Link>
 
       {/* Links */}
       <div className="hidden md:flex items-center gap-8">
-        {navLinks.map((link) => (
-          <a
-            key={link.label}
-            href={link.href}
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 font-medium"
-          >
-            {link.label}
-          </a>
-        ))}
+        {navLinks.map((link) =>
+          link.isRoute ? (
+            <Link
+              key={link.label}
+              to={link.href}
+              className="text-sm text-cosmos-cyan hover:text-foreground transition-colors duration-200 font-semibold"
+            >
+              {link.label}
+            </Link>
+          ) : (
+            <a
+              key={link.label}
+              href={link.href}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 font-medium"
+            >
+              {link.label}
+            </a>
+          )
+        )}
       </div>
 
       {/* Actions */}
@@ -59,6 +71,7 @@ export const Navbar = () => {
           onMouseLeave={(e) => {
             (e.currentTarget as HTMLElement).style.boxShadow = "none";
           }}
+          onClick={() => navigate("/courses")}
         >
           Get Started
         </button>

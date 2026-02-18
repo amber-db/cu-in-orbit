@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Telescope, ArrowRight } from "lucide-react";
 import { StarField } from "@/components/StarField";
+import { useNavigate } from "react-router-dom";
 
 export const HeroSection = () => {
+  const navigate = useNavigate();
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
       {/* Background cosmos image */}
@@ -56,12 +58,12 @@ export const HeroSection = () => {
           className="flex flex-col sm:flex-row gap-4 animate-fade-in-up"
           style={{ animationDelay: "0.6s", opacity: 0 }}
         >
-          <Button variant="cosmos" size="lg">
+          <Button variant="cosmos" size="lg" onClick={() => navigate("/courses")}>
             <Telescope className="w-4 h-4 mr-2" />
             Start Your Journey
           </Button>
-          <Button variant="cosmosOutline" size="lg">
-            Explore Features
+          <Button variant="cosmosOutline" size="lg" onClick={() => navigate("/courses")}>
+            Explore Courses
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
         </div>
