@@ -1,0 +1,318 @@
+export type QuizQuestion = {
+  id: string;
+  question: string;
+  options: string[];
+  correctIndex: number;
+  difficulty: "beginner" | "intermediate" | "advanced";
+  explanation: string;
+};
+
+export type CourseQuiz = {
+  courseId: string;
+  questions: QuizQuestion[];
+};
+
+export const quizzes: Record<string, QuizQuestion[]> = {
+  "pre-calculus": [
+    {
+      id: "pc-q1",
+      question: "What is the domain of f(x) = √(x − 4)?",
+      options: ["x > 4", "x ≥ 4", "x ≤ 4", "All real numbers"],
+      correctIndex: 1,
+      difficulty: "beginner",
+      explanation: "We need x − 4 ≥ 0, so x ≥ 4. The domain is [4, ∞).",
+    },
+    {
+      id: "pc-q2",
+      question: "Which transformation does g(x) = f(x − 3) + 2 apply to f?",
+      options: [
+        "Shift left 3, up 2",
+        "Shift right 3, up 2",
+        "Shift right 3, down 2",
+        "Shift left 3, down 2",
+      ],
+      correctIndex: 1,
+      difficulty: "beginner",
+      explanation: "f(x − h) shifts right by h. Adding 2 outside shifts up 2. So right 3, up 2.",
+    },
+    {
+      id: "pc-q3",
+      question: "Convert 240° to radians.",
+      options: ["3π/2", "4π/3", "5π/3", "2π/3"],
+      correctIndex: 1,
+      difficulty: "beginner",
+      explanation: "240° × (π/180) = 240π/180 = 4π/3.",
+    },
+    {
+      id: "pc-q4",
+      question: "What is sin²θ + cos²θ equal to for all θ?",
+      options: ["0", "2", "1", "sin 2θ"],
+      correctIndex: 2,
+      difficulty: "beginner",
+      explanation: "This is the fundamental Pythagorean identity: sin²θ + cos²θ = 1.",
+    },
+    {
+      id: "pc-q5",
+      question: "If f(x) = 2x + 1, what is f⁻¹(x)?",
+      options: ["(x − 1)/2", "2x − 1", "(x + 1)/2", "1/(2x + 1)"],
+      correctIndex: 0,
+      difficulty: "intermediate",
+      explanation: "Set y = 2x+1, solve for x: x = (y−1)/2. So f⁻¹(x) = (x−1)/2.",
+    },
+    {
+      id: "pc-q6",
+      question: "An infinite geometric series 4 + 2 + 1 + … has sum:",
+      options: ["6", "7", "8", "Diverges"],
+      correctIndex: 2,
+      difficulty: "intermediate",
+      explanation: "r = 1/2, |r| < 1. S = 4/(1 − 1/2) = 4/(1/2) = 8.",
+    },
+    {
+      id: "pc-q7",
+      question: "The foci of the ellipse x²/16 + y²/9 = 1 are at:",
+      options: ["(±4, 0)", "(±3, 0)", "(±√7, 0)", "(±7, 0)"],
+      correctIndex: 2,
+      difficulty: "intermediate",
+      explanation: "c² = a² − b² = 16 − 9 = 7, so c = √7. Foci at (±√7, 0).",
+    },
+    {
+      id: "pc-q8",
+      question: "Evaluate cos(5π/4).",
+      options: ["√2/2", "−√2/2", "√3/2", "−1/2"],
+      correctIndex: 1,
+      difficulty: "advanced",
+      explanation: "5π/4 is in Quadrant III; reference angle π/4. cos is negative in Q3. cos(5π/4) = −√2/2.",
+    },
+  ],
+
+  "calculus-1": [
+    {
+      id: "c1-q1",
+      question: "What is lim_{x→2} (x² − 4)/(x − 2)?",
+      options: ["0", "2", "4", "Undefined"],
+      correctIndex: 2,
+      difficulty: "beginner",
+      explanation: "Factor: (x−2)(x+2)/(x−2) = x+2. As x→2, this → 4.",
+    },
+    {
+      id: "c1-q2",
+      question: "f(x) is continuous at x = a if:",
+      options: [
+        "f(a) is defined only",
+        "The limit exists only",
+        "f(a) is defined, the limit exists, and they are equal",
+        "f'(a) exists",
+      ],
+      correctIndex: 2,
+      difficulty: "beginner",
+      explanation: "All three conditions must hold: f(a) defined, lim_{x→a}f(x) exists, and the limit equals f(a).",
+    },
+    {
+      id: "c1-q3",
+      question: "If f(x) = x⁴ − 3x², what is f'(x)?",
+      options: ["4x³ − 6x", "x³ − 3x", "4x³ − 3", "4x⁵ − 3x³"],
+      correctIndex: 0,
+      difficulty: "beginner",
+      explanation: "Power rule: d/dx(x⁴) = 4x³ and d/dx(3x²) = 6x. So f'(x) = 4x³ − 6x.",
+    },
+    {
+      id: "c1-q4",
+      question: "Use the chain rule to differentiate h(x) = (3x² + 1)⁵.",
+      options: ["5(3x² + 1)⁴", "5(6x)⁴", "30x(3x² + 1)⁴", "10x(3x² + 1)⁴"],
+      correctIndex: 2,
+      difficulty: "intermediate",
+      explanation: "h'(x) = 5(3x²+1)⁴ · 6x = 30x(3x²+1)⁴.",
+    },
+    {
+      id: "c1-q5",
+      question: "A function has a local minimum at x = c if:",
+      options: [
+        "f'(c) = 0 only",
+        "f'(c) = 0 and f'' (c) > 0",
+        "f'(c) = 0 and f''(c) < 0",
+        "f(c) is the smallest value on all of ℝ",
+      ],
+      correctIndex: 1,
+      difficulty: "intermediate",
+      explanation: "Second Derivative Test: f'(c) = 0 and f''(c) > 0 implies concave up → local minimum.",
+    },
+    {
+      id: "c1-q6",
+      question: "Evaluate ∫ (2x + cos x) dx.",
+      options: ["x² + sin x + C", "2 − sin x + C", "x² − sin x + C", "2x² + sin x + C"],
+      correctIndex: 0,
+      difficulty: "intermediate",
+      explanation: "∫2x dx = x², ∫cos x dx = sin x. So the answer is x² + sin x + C.",
+    },
+    {
+      id: "c1-q7",
+      question: "The Fundamental Theorem of Calculus Part 2 states that ∫ₐᵇ f(x)dx =",
+      options: ["f(b) − f(a)", "F(b) − F(a) where F' = f", "f'(b) − f'(a)", "lim_{n→∞} Σf(xᵢ)Δx"],
+      correctIndex: 1,
+      difficulty: "intermediate",
+      explanation: "FTC Part 2: if F is any antiderivative of f, then ∫ₐᵇ f dx = F(b) − F(a).",
+    },
+    {
+      id: "c1-q8",
+      question: "Using implicit differentiation on x² + y² = 25, find dy/dx.",
+      options: ["x/y", "−x/y", "2x/2y", "−y/x"],
+      correctIndex: 1,
+      difficulty: "advanced",
+      explanation: "Differentiate: 2x + 2y(dy/dx) = 0, so dy/dx = −x/y.",
+    },
+  ],
+
+  "calculus-2": [
+    {
+      id: "c2-q1",
+      question: "Which letter in LIATE should be chosen as 'u' in ∫ x ln x dx?",
+      options: ["x (Algebraic)", "ln x (Logarithm)", "Both equally", "Neither — use substitution"],
+      correctIndex: 1,
+      difficulty: "beginner",
+      explanation: "LIATE: Logarithm comes before Algebraic. Choose u = ln x, dv = x dx.",
+    },
+    {
+      id: "c2-q2",
+      question: "For ∫ √(4 − x²) dx, the correct trig substitution is:",
+      options: ["x = 2 tan θ", "x = 2 sin θ", "x = 2 sec θ", "x = 2 cos θ"],
+      correctIndex: 1,
+      difficulty: "beginner",
+      explanation: "For √(a²−x²), use x = a sin θ. Here a = 2, so x = 2 sin θ.",
+    },
+    {
+      id: "c2-q3",
+      question: "Does the series Σ 1/n² (n from 1 to ∞) converge?",
+      options: ["Yes, it's a p-series with p = 2 > 1", "No, it's a harmonic series", "Yes, by ratio test only", "No, divergence test"],
+      correctIndex: 0,
+      difficulty: "beginner",
+      explanation: "p-series Σ1/nᵖ converges iff p > 1. Here p = 2 > 1, so it converges (to π²/6).",
+    },
+    {
+      id: "c2-q4",
+      question: "What is the Maclaurin series for eˣ?",
+      options: [
+        "Σ xⁿ/n! from n=0 to ∞",
+        "Σ (−1)ⁿxⁿ/n! from n=0 to ∞",
+        "1 + x + x²/2",
+        "Σ xⁿ from n=0 to ∞",
+      ],
+      correctIndex: 0,
+      difficulty: "intermediate",
+      explanation: "eˣ = Σ_{n=0}^∞ xⁿ/n! = 1 + x + x²/2! + x³/3! + … (converges for all x).",
+    },
+    {
+      id: "c2-q5",
+      question: "Evaluate ∫ x eˣ dx using integration by parts.",
+      options: ["eˣ(x+1) + C", "eˣ(x−1) + C", "xeˣ + C", "eˣ/x + C"],
+      correctIndex: 1,
+      difficulty: "intermediate",
+      explanation: "u = x, dv = eˣ dx. IBP gives xeˣ − ∫eˣ dx = xeˣ − eˣ + C = eˣ(x−1) + C.",
+    },
+    {
+      id: "c2-q6",
+      question: "The Ratio Test gives L = 1/2 for series Σaₙ. What can we conclude?",
+      options: ["Diverges", "Converges absolutely", "Test is inconclusive", "Conditionally converges"],
+      correctIndex: 1,
+      difficulty: "intermediate",
+      explanation: "Ratio Test: L < 1 → converges absolutely. L = 1/2 < 1, so the series converges absolutely.",
+    },
+    {
+      id: "c2-q7",
+      question: "Partial fractions: decompose 1/(x(x+1)).",
+      options: ["1/x − 1/(x+1)", "1/x + 1/(x+1)", "−1/x + 1/(x+1)", "Cannot be decomposed"],
+      correctIndex: 0,
+      difficulty: "advanced",
+      explanation: "1/(x(x+1)) = A/x + B/(x+1). Multiply: 1 = A(x+1) + Bx. Set x=0: A=1. Set x=−1: B=−1. So 1/x − 1/(x+1).",
+    },
+    {
+      id: "c2-q8",
+      question: "The radius of convergence of Σ xⁿ/n is:",
+      options: ["0", "1/e", "1", "∞"],
+      correctIndex: 2,
+      difficulty: "advanced",
+      explanation: "Ratio test: |aₙ₊₁/aₙ| = n/(n+1)|x| → |x|. Converges when |x| < 1, so R = 1.",
+    },
+  ],
+
+  "calculus-3": [
+    {
+      id: "c3-q1",
+      question: "The dot product of u = ⟨1,2,3⟩ and v = ⟨4,0,−1⟩ is:",
+      options: ["1", "5", "7", "−5"],
+      correctIndex: 0,
+      difficulty: "beginner",
+      explanation: "u·v = (1)(4) + (2)(0) + (3)(−1) = 4 + 0 − 3 = 1.",
+    },
+    {
+      id: "c3-q2",
+      question: "∂/∂x [x²y³ + sin(xy)] at (0, 1) equals:",
+      options: ["0", "1", "2y³ + y cos(xy) at (0,1) = 2 + 1 = 3", "Cannot be computed"],
+      correctIndex: 1,
+      difficulty: "beginner",
+      explanation: "∂f/∂x = 2xy³ + y cos(xy). At (0,1): 0 + 1·cos(0) = 1·1 = 1.",
+    },
+    {
+      id: "c3-q3",
+      question: "The gradient ∇f at a point is always:",
+      options: [
+        "Parallel to level curves",
+        "Perpendicular to level curves",
+        "Equal to zero at extrema",
+        "The same as the Laplacian",
+      ],
+      correctIndex: 1,
+      difficulty: "beginner",
+      explanation: "The gradient is always perpendicular (normal) to level curves of f.",
+    },
+    {
+      id: "c3-q4",
+      question: "For f(x,y) with critical point (a,b), D = fₓₓfᵧᵧ − (fₓᵧ)² > 0 and fₓₓ < 0 means:",
+      options: ["Local minimum", "Local maximum", "Saddle point", "Inconclusive"],
+      correctIndex: 1,
+      difficulty: "intermediate",
+      explanation: "D > 0 and fₓₓ < 0: concave down in x-direction → local maximum.",
+    },
+    {
+      id: "c3-q5",
+      question: "Evaluate ∬_D dA where D is the disk of radius 3.",
+      options: ["3π", "6π", "9π", "18π"],
+      correctIndex: 2,
+      difficulty: "intermediate",
+      explanation: "The double integral of 1 over a region gives its area. Area of disk = π(3²) = 9π.",
+    },
+    {
+      id: "c3-q6",
+      question: "In polar coordinates, the area element dA equals:",
+      options: ["dr dθ", "r dr dθ", "r² dr dθ", "dr/r dθ"],
+      correctIndex: 1,
+      difficulty: "intermediate",
+      explanation: "In polar coordinates, dA = r dr dθ. The factor r is the Jacobian of the transformation.",
+    },
+    {
+      id: "c3-q7",
+      question: "Green's Theorem relates a line integral around curve C to:",
+      options: [
+        "A triple integral over a solid",
+        "A surface integral over a surface",
+        "A double integral over the enclosed region",
+        "Another line integral",
+      ],
+      correctIndex: 2,
+      difficulty: "advanced",
+      explanation: "Green's Theorem: ∮_C F·dr = ∬_D (∂Q/∂x − ∂P/∂y) dA — line integral to double integral over enclosed region D.",
+    },
+    {
+      id: "c3-q8",
+      question: "The Divergence Theorem converts ∯_S F·dS into:",
+      options: [
+        "∮_C F·dr",
+        "∬_S (∇×F)·dS",
+        "∭_E (∇·F) dV",
+        "∫ |F| dV",
+      ],
+      correctIndex: 2,
+      difficulty: "advanced",
+      explanation: "Divergence Theorem: ∯_S F·dS = ∭_E (∇·F) dV. Surface flux equals volume integral of divergence.",
+    },
+  ],
+};
