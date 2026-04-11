@@ -54,14 +54,14 @@ export const courses: Record<string, CourseData> = {
             title: "Introduction to Functions",
             duration: "25 min",
             summary:
-              "A function f assigns exactly one output to every input in its domain. We write y = f(x). The domain is the set of valid inputs; the range is the set of outputs produced.",
+              "A function $f$ assigns exactly one output to every input in its domain. We write $y = f(x)$. The domain is the set of valid inputs; the range is the set of outputs produced.",
             detailedExplanation:
-              "A function is one of the most fundamental concepts in mathematics. Think of it as a machine: you put something in (the input, or argument), and you get exactly one thing out (the output). The formal definition says: a function f from set A to set B is a rule that assigns to each element x in A exactly one element, called f(x), in B.\n\n**Domain and Range:** The domain is the set of all valid inputs. When we write f(x) = √(4 − x²), we need 4 − x² ≥ 0 because we cannot take the square root of a negative number. Solving gives −2 ≤ x ≤ 2, so the domain is [−2, 2]. The range is [0, 2] — the possible output values.\n\n**The Vertical Line Test:** A curve in the xy-plane is the graph of a function if and only if every vertical line intersects the curve at most once. This is because a function can only have one y-value for each x-value.\n\n**Function Notation:** f(x) is read \"f of x\". It does NOT mean f times x. If f(x) = x² + 1, then f(3) = 3² + 1 = 10, and f(a + 1) = (a+1)² + 1 = a² + 2a + 2.\n\n**Piecewise Functions** are defined by different formulas on different parts of their domain. For example, the absolute value function |x| = x when x ≥ 0 and |x| = −x when x < 0. These appear in physics (step functions) and economics (tax brackets).",
-            keyConcepts: ["Domain & Range", "Vertical Line Test", "Function Notation f(x)", "Piecewise Functions"],
+              "A function is one of the most fundamental concepts in mathematics. Think of it as a machine: you put something in (the input, or argument), and you get exactly one thing out (the output). The formal definition says: a function $f$ from set $A$ to set $B$ is a rule that assigns to each element $x$ in $A$ exactly one element, called $f(x)$, in $B$.\n\n**Domain and Range:** The domain is the set of all valid inputs. When we write $f(x) = \\sqrt{4 - x^2}$, we need $4 - x^2 \\geq 0$ because we cannot take the square root of a negative number. Solving gives $-2 \\leq x \\leq 2$, so the domain is $[-2, 2]$. The range is $[0, 2]$ — the possible output values.\n\n**The Vertical Line Test:** A curve in the $xy$-plane is the graph of a function if and only if every vertical line intersects the curve at most once. This is because a function can only have one $y$-value for each $x$-value.\n\n**Function Notation:** $f(x)$ is read \"f of x\". It does NOT mean $f$ times $x$. If $f(x) = x^2 + 1$, then $f(3) = 3^2 + 1 = 10$, and $f(a + 1) = (a+1)^2 + 1 = a^2 + 2a + 2$.\n\n**Piecewise Functions** are defined by different formulas on different parts of their domain. For example, the absolute value function $|x| = x$ when $x \\geq 0$ and $|x| = -x$ when $x < 0$. These appear in physics (step functions) and economics (tax brackets).",
+            keyConcepts: ["Domain & Range", "Vertical Line Test", "Function Notation $f(x)$", "Piecewise Functions"],
             worked_example: {
-              problem: "Find the domain of f(x) = √(4 − x²).",
+              problem: "Find the domain of $f(x) = \\sqrt{4 - x^2}$.",
               solution:
-                "We need 4 − x² ≥ 0  ⟹  x² ≤ 4  ⟹  −2 ≤ x ≤ 2. Domain: [−2, 2].",
+                "We need $4 - x^2 \\geq 0 \\implies x^2 \\leq 4 \\implies -2 \\leq x \\leq 2$. Domain: $[-2, 2]$.",
             },
             visual: {
               type: "bar",
@@ -349,14 +349,14 @@ export const courses: Record<string, CourseData> = {
             title: "The Concept of a Limit",
             duration: "30 min",
             summary:
-              "lim_{x→a} f(x) = L means f(x) can be made arbitrarily close to L by taking x sufficiently close (but not equal) to a. Left-hand and right-hand limits must agree for the two-sided limit to exist.",
+              "$\\lim_{x \\to a} f(x) = L$ means $f(x)$ can be made arbitrarily close to $L$ by taking $x$ sufficiently close (but not equal) to $a$. Left-hand and right-hand limits must agree for the two-sided limit to exist.",
             detailedExplanation:
-              "The limit is the central idea of calculus. All of differentiation and integration rest on it.\n\n**Intuitive Definition:** lim_{x→a} f(x) = L means: as x gets arbitrarily close to a (but never equals a), f(x) gets arbitrarily close to L. The value of f at a itself is irrelevant — it might not even be defined there.\n\n**One-Sided Limits:** The left-hand limit lim_{x→a⁻} f(x) considers x approaching a from below. The right-hand limit lim_{x→a⁺} considers x from above. The two-sided limit exists if and only if both one-sided limits exist and are equal.\n\n**Key Limit Laws:** If lim f(x) = L and lim g(x) = M, then:\n- lim [f(x) + g(x)] = L + M\n- lim [f(x)·g(x)] = L·M\n- lim [f(x)/g(x)] = L/M (if M ≠ 0)\n- lim [f(x)ⁿ] = Lⁿ\n\n**Squeeze Theorem:** If h(x) ≤ f(x) ≤ g(x) near a, and lim h(x) = lim g(x) = L, then lim f(x) = L. This proves lim_{x→0} (sin x)/x = 1 — one of the most important limits in calculus.\n\n**Indeterminate Forms:** When direct substitution gives 0/0 or ∞/∞, we use algebra (factor and cancel), L'Hôpital's Rule, or series expansions to evaluate the limit.",
+              "The limit is the central idea of calculus. All of differentiation and integration rest on it.\n\n**Intuitive Definition:** $\\lim_{x \\to a} f(x) = L$ means: as $x$ gets arbitrarily close to $a$ (but never equals $a$), $f(x)$ gets arbitrarily close to $L$. The value of $f$ at $a$ itself is irrelevant — it might not even be defined there.\n\n**One-Sided Limits:** The left-hand limit $\\lim_{x \\to a^-} f(x)$ considers $x$ approaching $a$ from below. The right-hand limit $\\lim_{x \\to a^+}$ considers $x$ from above. The two-sided limit exists if and only if both one-sided limits exist and are equal.\n\n**Key Limit Laws:** If $\\lim f(x) = L$ and $\\lim g(x) = M$, then:\n- $\\lim [f(x) + g(x)] = L + M$\n- $\\lim [f(x) \\cdot g(x)] = L \\cdot M$\n- $\\lim [f(x)/g(x)] = L/M$ (if $M \\neq 0$)\n- $\\lim [f(x)^n] = L^n$\n\n**Squeeze Theorem:** If $h(x) \\leq f(x) \\leq g(x)$ near $a$, and $\\lim h(x) = \\lim g(x) = L$, then $\\lim f(x) = L$. This proves $\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1$ — one of the most important limits in calculus.\n\n**Indeterminate Forms:** When direct substitution gives $\\frac{0}{0}$ or $\\frac{\\infty}{\\infty}$, we use algebra (factor and cancel), L'Hôpital's Rule, or series expansions to evaluate the limit.",
             keyConcepts: ["Intuitive Limit", "One-Sided Limits", "Limit Laws", "Squeeze Theorem"],
             worked_example: {
-              problem: "Evaluate lim_{x→0} (sin x)/x.",
+              problem: "Evaluate $\\lim_{x \\to 0} \\frac{\\sin x}{x}$.",
               solution:
-                "By the Squeeze Theorem (or geometric argument): cos x ≤ (sin x)/x ≤ 1 near 0, and both bounds → 1. Therefore lim_{x→0} (sin x)/x = 1.",
+                "By the Squeeze Theorem (geometric argument): $\\cos x \\leq \\frac{\\sin x}{x} \\leq 1$ near $0$, and both bounds $\\to 1$. Therefore $\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1$.",
             },
             visual: {
               type: "line",
@@ -447,14 +447,14 @@ export const courses: Record<string, CourseData> = {
             title: "The Derivative & Differentiation Rules",
             duration: "40 min",
             summary:
-              "The derivative f'(x) = lim_{h→0} [f(x+h)−f(x)]/h measures instantaneous rate of change. Rules: Power d/dx(xⁿ)=nxⁿ⁻¹, Product (uv)'=u'v+uv', Quotient (u/v)'=(u'v−uv')/v², Chain d/dx[f(g(x))]=f'(g(x))g'(x).",
+              "The derivative $f'(x) = \\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h}$ measures instantaneous rate of change. Rules: Power $\\frac{d}{dx}(x^n) = nx^{n-1}$, Product $(uv)' = u'v + uv'$, Quotient $\\left(\\frac{u}{v}\\right)' = \\frac{u'v - uv'}{v^2}$, Chain $\\frac{d}{dx}[f(g(x))] = f'(g(x))g'(x)$.",
             detailedExplanation:
               "The derivative is the instantaneous rate of change — the slope of the tangent line to the graph of f at a point. It is defined as:\n\nf'(x) = lim_{h→0} [f(x+h) − f(x)] / h\n\nThis is the slope of the secant line (through two nearby points) in the limit as the gap shrinks to zero.\n\n**Differentiation Rules (memorise these!):**\n\nConstant: d/dx(c) = 0\nPower Rule: d/dx(xⁿ) = nxⁿ⁻¹ — works for all real n\nConstant Multiple: d/dx[cf(x)] = c·f'(x)\nSum/Difference: (f ± g)' = f' ± g'\nProduct Rule: (uv)' = u'v + uv' — do NOT distribute derivatives over products!\nQuotient Rule: (u/v)' = (u'v − uv')/v²\nChain Rule: d/dx[f(g(x))] = f'(g(x))·g'(x) — differentiate outside, multiply by derivative of inside\n\n**Key function derivatives:**\n- d/dx(sin x) = cos x\n- d/dx(cos x) = −sin x\n- d/dx(eˣ) = eˣ\n- d/dx(ln x) = 1/x\n- d/dx(arctan x) = 1/(1+x²)\n\n**Physical interpretation:** If s(t) is position, s'(t) = v(t) is velocity, s''(t) = a(t) is acceleration. The derivative is negative when the function is decreasing (moving left/down) and positive when increasing.",
             keyConcepts: ["Limit Definition of Derivative", "Power Rule", "Product & Quotient Rules", "Chain Rule"],
             worked_example: {
-              problem: "Differentiate h(x) = sin(x²).",
+              problem: "Differentiate $h(x) = \\sin(x^2)$.",
               solution:
-                "Chain rule: outer = sin u, inner = x². h'(x) = cos(x²) · 2x.",
+                "Chain rule: outer $= \\sin u$, inner $= x^2$. $h'(x) = \\cos(x^2) \\cdot 2x$.",
             },
             visual: {
               type: "line",
@@ -494,14 +494,14 @@ export const courses: Record<string, CourseData> = {
             title: "Implicit Differentiation & Related Rates",
             duration: "35 min",
             summary:
-              "Implicit differentiation treats y as a function of x and differentiates both sides with respect to x, applying the chain rule to y-terms (giving dy/dx factors). Related rates apply this to real-world quantities changing over time.",
+              "Implicit differentiation treats $y$ as a function of $x$ and differentiates both sides with respect to $x$, applying the chain rule to $y$-terms (giving $\\frac{dy}{dx}$ factors). Related rates apply this to real-world quantities changing over time.",
             detailedExplanation:
-              "Sometimes a curve is defined implicitly by an equation like x² + y² = 25 rather than explicitly as y = f(x). We can still differentiate.\n\n**Implicit Differentiation:** Differentiate both sides of the equation with respect to x. When differentiating y-terms, apply the chain rule: d/dx[y²] = 2y · (dy/dx). Then solve for dy/dx.\n\nExample: Differentiate x² + y² = 25.\n- d/dx[x²] + d/dx[y²] = d/dx[25]\n- 2x + 2y(dy/dx) = 0\n- dy/dx = −x/y\n\nThis gives the slope of the tangent at any point (x, y) on the circle.\n\n**Related Rates:** When multiple quantities are all functions of time t, implicit differentiation with respect to t relates their rates of change. Strategy:\n1. Draw a diagram and label all variables\n2. Find an equation relating the variables (geometric formula, law, etc.)\n3. Differentiate both sides with respect to t\n4. Substitute known values and solve for the unknown rate\n\n**Common setups:** Pythagorean theorem (sliding ladder), volume formulas (filling tank), area formulas (spreading oil spill), similar triangles (shadow length).\n\n**Key pitfall:** Substitute specific values only AFTER differentiating — substituting before differentiation would turn a variable into a constant with zero derivative.",
-            keyConcepts: ["Implicit Differentiation", "dy/dx from Implicit Equations", "Related Rates Setup", "Units & Interpretation"],
+              "Sometimes a curve is defined implicitly by an equation like $x^2 + y^2 = 25$ rather than explicitly as $y = f(x)$. We can still differentiate.\n\n**Implicit Differentiation:** Differentiate both sides of the equation with respect to $x$. When differentiating $y$-terms, apply the chain rule: $\\frac{d}{dx}[y^2] = 2y \\cdot \\frac{dy}{dx}$. Then solve for $\\frac{dy}{dx}$.\n\nExample: Differentiate $x^2 + y^2 = 25$.\n- $\\frac{d}{dx}[x^2] + \\frac{d}{dx}[y^2] = \\frac{d}{dx}[25]$\n- $2x + 2y\\frac{dy}{dx} = 0$\n- $\\frac{dy}{dx} = -\\frac{x}{y}$\n\nThis gives the slope of the tangent at any point $(x, y)$ on the circle.\n\n**Related Rates:** When multiple quantities are all functions of time $t$, implicit differentiation with respect to $t$ relates their rates of change. Strategy:\n1. Draw a diagram and label all variables\n2. Find an equation relating the variables (geometric formula, law, etc.)\n3. Differentiate both sides with respect to $t$\n4. Substitute known values and solve for the unknown rate\n\n**Common setups:** Pythagorean theorem (sliding ladder), volume formulas (filling tank), area formulas (spreading oil spill), similar triangles (shadow length).\n\n**Key pitfall:** Substitute specific values only AFTER differentiating — substituting before differentiation would turn a variable into a constant with zero derivative.",
+            keyConcepts: ["Implicit Differentiation", "$\\frac{dy}{dx}$ from Implicit Equations", "Related Rates Setup", "Units & Interpretation"],
             worked_example: {
-              problem: "A spherical balloon is inflated at 10 cm³/s. How fast is the radius growing when r = 5 cm?",
+              problem: "A spherical balloon is inflated at $10 \\text{ cm}^3/\\text{s}$. How fast is the radius growing when $r = 5$ cm?",
               solution:
-                "V = (4/3)πr³. dV/dt = 4πr² dr/dt. So dr/dt = (dV/dt)/(4πr²) = 10/(4π·25) = 1/(10π) cm/s.",
+                "$V = \\frac{4}{3}\\pi r^3$. $\\frac{dV}{dt} = 4\\pi r^2 \\frac{dr}{dt}$. So $\\frac{dr}{dt} = \\frac{dV/dt}{4\\pi r^2} = \\frac{10}{4\\pi \\cdot 25} = \\frac{1}{10\\pi}$ cm/s.",
             },
             references: [
               {
