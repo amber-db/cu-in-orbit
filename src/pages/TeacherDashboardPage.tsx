@@ -3,13 +3,13 @@ import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { courses } from "@/data/courseContent";
 import {
-  BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
-  XAxis, YAxis, Tooltip, ResponsiveContainer, Legend,
+  BarChart, Bar, PieChart, Pie, Cell,
+  XAxis, YAxis, Tooltip, ResponsiveContainer,
   RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
 } from "recharts";
 import {
-  Users, BookOpen, TrendingUp, AlertTriangle,
-  BarChart2, GraduationCap, Clock, Target,
+  Users, TrendingUp, AlertTriangle,
+  BarChart2, GraduationCap, Target,
 } from "lucide-react";
 
 // Simulated class data
