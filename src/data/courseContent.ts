@@ -54,14 +54,14 @@ export const courses: Record<string, CourseData> = {
             title: "Introduction to Functions",
             duration: "25 min",
             summary:
-              "A function f assigns exactly one output to every input in its domain. We write y = f(x). The domain is the set of valid inputs; the range is the set of outputs produced.",
+              "A function $f$ assigns exactly one output to every input in its domain. We write $y = f(x)$. The domain is the set of valid inputs; the range is the set of outputs produced.",
             detailedExplanation:
-              "A function is one of the most fundamental concepts in mathematics. Think of it as a machine: you put something in (the input, or argument), and you get exactly one thing out (the output). The formal definition says: a function f from set A to set B is a rule that assigns to each element x in A exactly one element, called f(x), in B.\n\n**Domain and Range:** The domain is the set of all valid inputs. When we write f(x) = √(4 − x²), we need 4 − x² ≥ 0 because we cannot take the square root of a negative number. Solving gives −2 ≤ x ≤ 2, so the domain is [−2, 2]. The range is [0, 2] — the possible output values.\n\n**The Vertical Line Test:** A curve in the xy-plane is the graph of a function if and only if every vertical line intersects the curve at most once. This is because a function can only have one y-value for each x-value.\n\n**Function Notation:** f(x) is read \"f of x\". It does NOT mean f times x. If f(x) = x² + 1, then f(3) = 3² + 1 = 10, and f(a + 1) = (a+1)² + 1 = a² + 2a + 2.\n\n**Piecewise Functions** are defined by different formulas on different parts of their domain. For example, the absolute value function |x| = x when x ≥ 0 and |x| = −x when x < 0. These appear in physics (step functions) and economics (tax brackets).",
-            keyConcepts: ["Domain & Range", "Vertical Line Test", "Function Notation f(x)", "Piecewise Functions"],
+              "A function is one of the most fundamental concepts in mathematics. Think of it as a machine: you put something in (the input, or argument), and you get exactly one thing out (the output). The formal definition says: a function $f$ from set $A$ to set $B$ is a rule that assigns to each element $x$ in $A$ exactly one element, called $f(x)$, in $B$.\n\n**Domain and Range:** The domain is the set of all valid inputs. When we write $f(x) = \\sqrt{4 - x^2}$, we need $4 - x^2 \\geq 0$ because we cannot take the square root of a negative number. Solving gives $-2 \\leq x \\leq 2$, so the domain is $[-2, 2]$. The range is $[0, 2]$ — the possible output values.\n\n**The Vertical Line Test:** A curve in the $xy$-plane is the graph of a function if and only if every vertical line intersects the curve at most once. This is because a function can only have one $y$-value for each $x$-value.\n\n**Function Notation:** $f(x)$ is read \"f of x\". It does NOT mean $f$ times $x$. If $f(x) = x^2 + 1$, then $f(3) = 3^2 + 1 = 10$, and $f(a + 1) = (a+1)^2 + 1 = a^2 + 2a + 2$.\n\n**Piecewise Functions** are defined by different formulas on different parts of their domain. For example, the absolute value function $|x| = x$ when $x \\geq 0$ and $|x| = -x$ when $x < 0$. These appear in physics (step functions) and economics (tax brackets).",
+            keyConcepts: ["Domain & Range", "Vertical Line Test", "Function Notation $f(x)$", "Piecewise Functions"],
             worked_example: {
-              problem: "Find the domain of f(x) = √(4 − x²).",
+              problem: "Find the domain of $f(x) = \\sqrt{4 - x^2}$.",
               solution:
-                "We need 4 − x² ≥ 0  ⟹  x² ≤ 4  ⟹  −2 ≤ x ≤ 2. Domain: [−2, 2].",
+                "We need $4 - x^2 \\geq 0 \\implies x^2 \\leq 4 \\implies -2 \\leq x \\leq 2$. Domain: $[-2, 2]$.",
             },
             visual: {
               type: "bar",
