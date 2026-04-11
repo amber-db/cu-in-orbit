@@ -4,6 +4,7 @@ import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { courses } from "@/data/courseContent";
 import { useProgress } from "@/hooks/useProgress";
+import { MathText } from "@/components/MathRenderer";
 import {
   AreaChart, Area, BarChart, Bar, LineChart, Line,
   XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
@@ -29,6 +30,15 @@ const ChartTooltipCustom = ({ active, payload }: { active?: boolean; payload?: {
   }
   return null;
 };
+
+/** Renders text with $...$ inline math via KaTeX */
+function MathParagraph({ text, className = "" }: { text: string; className?: string }) {
+  return (
+    <p className={className}>
+      <MathText text={text} />
+    </p>
+  );
+}
 
 export default function CourseLessonPage() {
   const { courseId } = useParams<{ courseId: string }>();
@@ -83,7 +93,6 @@ export default function CourseLessonPage() {
       margin: { top: 5, right: 10, left: 0, bottom: 5 },
     };
     const axisStyle = { fill: "hsl(var(--muted-foreground))", fontSize: 11 };
-    const tooltipStyle = <ChartTooltipCustom active={false} />;
 
     return (
       <div className="card-cosmos rounded-xl p-6 border border-secondary mb-6">
@@ -216,7 +225,7 @@ export default function CourseLessonPage() {
               {/* Summary */}
               <div className={`card-cosmos rounded-xl p-6 border ${c.border} mb-6`}>
                 <h2 className={`font-display font-semibold text-lg mb-3 ${c.accent}`}>📖 Lesson Summary</h2>
-                <p className="text-foreground leading-relaxed">{lesson.summary}</p>
+                <MathParagraph text={lesson.summary} className="text-foreground leading-relaxed" />
               </div>
 
               {/* Detailed Explanation (toggle) */}
@@ -240,11 +249,11 @@ export default function CourseLessonPage() {
                           return (
                             <div key={i}>
                               <p className={`font-semibold text-sm mb-1 ${c.accent}`}>{heading.replace(/\*\*/g, "")}:</p>
-                              <p className="text-sm text-muted-foreground leading-relaxed">{rest.join(":**").replace(/\*\*/g, "")}</p>
+                              <MathParagraph text={rest.join(":**").replace(/\*\*/g, "")} className="text-sm text-muted-foreground leading-relaxed" />
                             </div>
                           );
                         }
-                        return <p key={i} className="text-sm text-muted-foreground leading-relaxed">{para.replace(/\*\*/g, "")}</p>;
+                        return <MathParagraph key={i} text={para.replace(/\*\*/g, "")} className="text-sm text-muted-foreground leading-relaxed" />;
                       })}
                     </div>
                   </div>
@@ -262,7 +271,7 @@ export default function CourseLessonPage() {
                 <div className="flex flex-wrap gap-2">
                   {lesson.keyConcepts.map((kc) => (
                     <span key={kc} className="text-sm px-3 py-1.5 rounded-lg font-medium" style={{ background: "hsl(var(--secondary))", color: "hsl(var(--foreground))" }}>
-                      {kc}
+                      <MathText text={kc} />
                     </span>
                   ))}
                 </div>
@@ -275,11 +284,11 @@ export default function CourseLessonPage() {
                 </h2>
                 <div className="rounded-lg p-4 mb-4 text-sm font-mono leading-relaxed" style={{ background: "hsl(var(--muted))", color: "hsl(var(--foreground))" }}>
                   <span className="text-cosmos-gold font-semibold block mb-1">Problem:</span>
-                  {lesson.worked_example.problem}
+                  <MathText text={lesson.worked_example.problem} />
                 </div>
                 <div className="rounded-lg p-4 text-sm font-mono leading-relaxed" style={{ background: "hsl(191 97% 55% / 0.05)", border: "1px solid hsl(191 97% 55% / 0.15)", color: "hsl(var(--foreground))" }}>
                   <span className="text-cosmos-cyan font-semibold block mb-1">Solution:</span>
-                  {lesson.worked_example.solution}
+                  <MathText text={lesson.worked_example.solution} />
                 </div>
               </div>
 
