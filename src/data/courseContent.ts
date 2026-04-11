@@ -452,9 +452,9 @@ export const courses: Record<string, CourseData> = {
               "The derivative is the instantaneous rate of change — the slope of the tangent line to the graph of f at a point. It is defined as:\n\nf'(x) = lim_{h→0} [f(x+h) − f(x)] / h\n\nThis is the slope of the secant line (through two nearby points) in the limit as the gap shrinks to zero.\n\n**Differentiation Rules (memorise these!):**\n\nConstant: d/dx(c) = 0\nPower Rule: d/dx(xⁿ) = nxⁿ⁻¹ — works for all real n\nConstant Multiple: d/dx[cf(x)] = c·f'(x)\nSum/Difference: (f ± g)' = f' ± g'\nProduct Rule: (uv)' = u'v + uv' — do NOT distribute derivatives over products!\nQuotient Rule: (u/v)' = (u'v − uv')/v²\nChain Rule: d/dx[f(g(x))] = f'(g(x))·g'(x) — differentiate outside, multiply by derivative of inside\n\n**Key function derivatives:**\n- d/dx(sin x) = cos x\n- d/dx(cos x) = −sin x\n- d/dx(eˣ) = eˣ\n- d/dx(ln x) = 1/x\n- d/dx(arctan x) = 1/(1+x²)\n\n**Physical interpretation:** If s(t) is position, s'(t) = v(t) is velocity, s''(t) = a(t) is acceleration. The derivative is negative when the function is decreasing (moving left/down) and positive when increasing.",
             keyConcepts: ["Limit Definition of Derivative", "Power Rule", "Product & Quotient Rules", "Chain Rule"],
             worked_example: {
-              problem: "Differentiate h(x) = sin(x²).",
+              problem: "Differentiate $h(x) = \\sin(x^2)$.",
               solution:
-                "Chain rule: outer = sin u, inner = x². h'(x) = cos(x²) · 2x.",
+                "Chain rule: outer $= \\sin u$, inner $= x^2$. $h'(x) = \\cos(x^2) \\cdot 2x$.",
             },
             visual: {
               type: "line",
@@ -494,14 +494,14 @@ export const courses: Record<string, CourseData> = {
             title: "Implicit Differentiation & Related Rates",
             duration: "35 min",
             summary:
-              "Implicit differentiation treats y as a function of x and differentiates both sides with respect to x, applying the chain rule to y-terms (giving dy/dx factors). Related rates apply this to real-world quantities changing over time.",
+              "Implicit differentiation treats $y$ as a function of $x$ and differentiates both sides with respect to $x$, applying the chain rule to $y$-terms (giving $\\frac{dy}{dx}$ factors). Related rates apply this to real-world quantities changing over time.",
             detailedExplanation:
-              "Sometimes a curve is defined implicitly by an equation like x² + y² = 25 rather than explicitly as y = f(x). We can still differentiate.\n\n**Implicit Differentiation:** Differentiate both sides of the equation with respect to x. When differentiating y-terms, apply the chain rule: d/dx[y²] = 2y · (dy/dx). Then solve for dy/dx.\n\nExample: Differentiate x² + y² = 25.\n- d/dx[x²] + d/dx[y²] = d/dx[25]\n- 2x + 2y(dy/dx) = 0\n- dy/dx = −x/y\n\nThis gives the slope of the tangent at any point (x, y) on the circle.\n\n**Related Rates:** When multiple quantities are all functions of time t, implicit differentiation with respect to t relates their rates of change. Strategy:\n1. Draw a diagram and label all variables\n2. Find an equation relating the variables (geometric formula, law, etc.)\n3. Differentiate both sides with respect to t\n4. Substitute known values and solve for the unknown rate\n\n**Common setups:** Pythagorean theorem (sliding ladder), volume formulas (filling tank), area formulas (spreading oil spill), similar triangles (shadow length).\n\n**Key pitfall:** Substitute specific values only AFTER differentiating — substituting before differentiation would turn a variable into a constant with zero derivative.",
-            keyConcepts: ["Implicit Differentiation", "dy/dx from Implicit Equations", "Related Rates Setup", "Units & Interpretation"],
+              "Sometimes a curve is defined implicitly by an equation like $x^2 + y^2 = 25$ rather than explicitly as $y = f(x)$. We can still differentiate.\n\n**Implicit Differentiation:** Differentiate both sides of the equation with respect to $x$. When differentiating $y$-terms, apply the chain rule: $\\frac{d}{dx}[y^2] = 2y \\cdot \\frac{dy}{dx}$. Then solve for $\\frac{dy}{dx}$.\n\nExample: Differentiate $x^2 + y^2 = 25$.\n- $\\frac{d}{dx}[x^2] + \\frac{d}{dx}[y^2] = \\frac{d}{dx}[25]$\n- $2x + 2y\\frac{dy}{dx} = 0$\n- $\\frac{dy}{dx} = -\\frac{x}{y}$\n\nThis gives the slope of the tangent at any point $(x, y)$ on the circle.\n\n**Related Rates:** When multiple quantities are all functions of time $t$, implicit differentiation with respect to $t$ relates their rates of change. Strategy:\n1. Draw a diagram and label all variables\n2. Find an equation relating the variables (geometric formula, law, etc.)\n3. Differentiate both sides with respect to $t$\n4. Substitute known values and solve for the unknown rate\n\n**Common setups:** Pythagorean theorem (sliding ladder), volume formulas (filling tank), area formulas (spreading oil spill), similar triangles (shadow length).\n\n**Key pitfall:** Substitute specific values only AFTER differentiating — substituting before differentiation would turn a variable into a constant with zero derivative.",
+            keyConcepts: ["Implicit Differentiation", "$\\frac{dy}{dx}$ from Implicit Equations", "Related Rates Setup", "Units & Interpretation"],
             worked_example: {
-              problem: "A spherical balloon is inflated at 10 cm³/s. How fast is the radius growing when r = 5 cm?",
+              problem: "A spherical balloon is inflated at $10 \\text{ cm}^3/\\text{s}$. How fast is the radius growing when $r = 5$ cm?",
               solution:
-                "V = (4/3)πr³. dV/dt = 4πr² dr/dt. So dr/dt = (dV/dt)/(4πr²) = 10/(4π·25) = 1/(10π) cm/s.",
+                "$V = \\frac{4}{3}\\pi r^3$. $\\frac{dV}{dt} = 4\\pi r^2 \\frac{dr}{dt}$. So $\\frac{dr}{dt} = \\frac{dV/dt}{4\\pi r^2} = \\frac{10}{4\\pi \\cdot 25} = \\frac{1}{10\\pi}$ cm/s.",
             },
             references: [
               {
