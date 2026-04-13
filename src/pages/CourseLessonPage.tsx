@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { courses } from "@/data/courseContent";
 import { useProgress } from "@/hooks/useProgress";
 import { MathText } from "@/components/MathRenderer";
+import { PracticeProblems } from "@/components/PracticeProblems";
 import {
   AreaChart, Area, BarChart, Bar, LineChart, Line,
   XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
@@ -291,6 +292,9 @@ export default function CourseLessonPage() {
                   <MathText text={lesson.worked_example.solution} />
                 </div>
               </div>
+
+              {/* Practice Problems */}
+              <PracticeProblems lessonId={lesson.id} />
 
               {/* References */}
               <div className="card-cosmos rounded-xl p-6 border border-secondary mb-10">
