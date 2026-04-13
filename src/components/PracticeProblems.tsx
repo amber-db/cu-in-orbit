@@ -1,5 +1,5 @@
-import { useState, useCallback } from "react";
-import { practiceProblems, PracticeQuestion } from "@/data/practiceProblems";
+import { useState } from "react";
+import { practiceProblems } from "@/data/practiceProblems";
 import { MathText } from "@/components/MathRenderer";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle, Brain, RotateCcw } from "lucide-react";

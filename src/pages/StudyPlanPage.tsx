@@ -7,7 +7,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { courses } from "@/data/courseContent";
 import { useProgress } from "@/hooks/useProgress";
 import { Calendar, Clock, Target, ArrowRight, CheckCircle, BookOpen, Rocket } from "lucide-react";
-import { format, addDays, startOfWeek, isWeekend } from "date-fns";
+import { format, addDays, startOfWeek } from "date-fns";
 
 type DayPlan = {
   date: Date;
