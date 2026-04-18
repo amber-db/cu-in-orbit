@@ -6,6 +6,7 @@ import { MathText } from "@/components/MathRenderer";
 import { courses } from "@/data/courseContent";
 import { practiceProblems, type PracticeQuestion } from "@/data/practiceProblems";
 import { CheckCircle, XCircle, Brain, RotateCcw, Trophy, Shuffle, ArrowLeft, Timer, Zap } from "lucide-react";
+import { BADGES, computeBadges, type BadgeId } from "@/lib/achievements";
 
 type QuizQuestion = PracticeQuestion & { lessonId: string; lessonTitle: string };
 type Mode = "classic" | "timed";
@@ -25,6 +26,8 @@ export type LeaderboardEntry = {
   total: number;
   points: number;
   date: string;
+  fastestCorrectSeconds?: number | null;
+  badges?: BadgeId[];
 };
 
 function loadHighScores(): Record<string, { best: number; total: number; date: string }> {
