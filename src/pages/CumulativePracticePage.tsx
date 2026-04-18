@@ -302,6 +302,31 @@ export default function CumulativePracticePage() {
               )}
             </div>
 
+            {/* Earned badges */}
+            {earnedBadges.length > 0 && (
+              <div className="border-t border-secondary pt-6 mb-6">
+                <h3 className="font-semibold text-foreground mb-3 text-center">Achievements Unlocked</h3>
+                <div className="flex flex-wrap justify-center gap-3">
+                  {earnedBadges.map((bid) => {
+                    const b = BADGES[bid];
+                    const Icon = b.icon;
+                    return (
+                      <div
+                        key={bid}
+                        className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border ${b.bgClass}`}
+                      >
+                        <Icon className={`w-5 h-5 ${b.colorClass}`} />
+                        <div className="text-left">
+                          <p className={`text-sm font-bold ${b.colorClass}`}>{b.label}</p>
+                          <p className="text-[11px] text-muted-foreground">{b.description}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             <div className="border-t border-secondary pt-6 mb-6">
               <h3 className="font-semibold text-foreground mb-4">Review Answers</h3>
               <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
