@@ -5,6 +5,7 @@ const navLinks = [
   { label: "Dashboard", href: "/dashboard", isRoute: true },
   { label: "Study Plan", href: "/study-plan", isRoute: true },
   { label: "Practice", href: "/practice", isRoute: true },
+  { label: "Leaderboard", href: "/leaderboard", isRoute: true },
   { label: "Teacher", href: "/teacher", isRoute: true },
 ];
 
