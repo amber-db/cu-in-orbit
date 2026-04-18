@@ -78,8 +78,9 @@ export default function CumulativePracticePage() {
   const [points, setPoints] = useState(0);
   const [lastBonus, setLastBonus] = useState(0);
   const [finished, setFinished] = useState(false);
-  const [answers, setAnswers] = useState<{ q: QuizQuestion; selected: number | null; bonus: number }[]>([]);
+  const [answers, setAnswers] = useState<{ q: QuizQuestion; selected: number | null; bonus: number; secondsTaken: number | null }[]>([]);
   const [timeLeft, setTimeLeft] = useState(TIME_PER_Q);
+  const [earnedBadges, setEarnedBadges] = useState<BadgeId[]>([]);
   const questionStartRef = useRef<number>(Date.now());
 
   const highScores = loadHighScores();
@@ -92,7 +93,7 @@ export default function CumulativePracticePage() {
       const q = questions[current];
       setShowResult(true);
       setSelected(-1);
-      setAnswers((a) => [...a, { q, selected: null, bonus: 0 }]);
+      setAnswers((a) => [...a, { q, selected: null, bonus: 0, secondsTaken: TIME_PER_Q }]);
       return;
     }
     const t = setTimeout(() => setTimeLeft((s) => s - 1), 1000);
@@ -121,6 +122,7 @@ export default function CumulativePracticePage() {
     setLastBonus(0);
     setFinished(false);
     setAnswers([]);
+    setEarnedBadges([]);
     setTimeLeft(TIME_PER_Q);
     questionStartRef.current = Date.now();
   };
@@ -131,11 +133,14 @@ export default function CumulativePracticePage() {
     setShowResult(true);
     const q = questions[current];
     const isCorrect = idx === q.correctIndex;
+    const secondsTaken =
+      mode === "timed"
+        ? TIME_PER_Q - timeLeft
+        : Math.round((Date.now() - questionStartRef.current) / 1000);
     let bonus = 0;
     if (isCorrect) {
       setScore((s) => s + 1);
       if (mode === "timed") {
-        // Bonus scales with remaining time
         bonus = Math.round((timeLeft / TIME_PER_Q) * MAX_BONUS);
         setPoints((p) => p + BASE_POINTS + bonus);
       } else {
@@ -143,7 +148,7 @@ export default function CumulativePracticePage() {
       }
     }
     setLastBonus(bonus);
-    setAnswers((a) => [...a, { q, selected: idx, bonus }]);
+    setAnswers((a) => [...a, { q, selected: idx, bonus, secondsTaken }]);
   };
 
   const handleNext = () => {
@@ -156,6 +161,18 @@ export default function CumulativePracticePage() {
       questionStartRef.current = Date.now();
     } else {
       if (courseId) {
+        const correctTimes = answers
+          .filter((a) => a.selected === a.q.correctIndex && a.secondsTaken !== null)
+          .map((a) => a.secondsTaken as number);
+        const fastestCorrectSeconds = correctTimes.length > 0 ? Math.min(...correctTimes) : null;
+        const badges = computeBadges({
+          mode,
+          correct: score,
+          total: questions.length,
+          points,
+          fastestCorrectSeconds,
+        });
+        setEarnedBadges(badges);
         saveHighScore(courseId, score, questions.length);
         saveToLeaderboard({
           courseId,
@@ -163,6 +180,8 @@ export default function CumulativePracticePage() {
           correct: score,
           total: questions.length,
           points,
+          fastestCorrectSeconds,
+          badges,
         });
       }
       setFinished(true);
