@@ -1,5 +1,4 @@
-import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { StarField } from "@/components/StarField";
 import { Button } from "@/components/ui/button";
@@ -41,7 +40,6 @@ function shuffle<T>(arr: T[]): T[] {
 const QUIZ_LENGTH = 10;
 
 export default function CumulativePracticePage() {
-  const navigate = useNavigate();
   const [courseId, setCourseId] = useState<string | null>(null);
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [current, setCurrent] = useState(0);
