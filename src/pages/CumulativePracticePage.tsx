@@ -6,6 +6,7 @@ import { MathText } from "@/components/MathRenderer";
 import { courses } from "@/data/courseContent";
 import { practiceProblems, type PracticeQuestion } from "@/data/practiceProblems";
 import { CheckCircle, XCircle, Brain, RotateCcw, Trophy, Shuffle, ArrowLeft, Timer, Zap } from "lucide-react";
+import { BADGES, computeBadges, type BadgeId } from "@/lib/achievements";
 
 type QuizQuestion = PracticeQuestion & { lessonId: string; lessonTitle: string };
 type Mode = "classic" | "timed";
@@ -25,6 +26,8 @@ export type LeaderboardEntry = {
   total: number;
   points: number;
   date: string;
+  fastestCorrectSeconds?: number | null;
+  badges?: BadgeId[];
 };
 
 function loadHighScores(): Record<string, { best: number; total: number; date: string }> {
@@ -75,8 +78,9 @@ export default function CumulativePracticePage() {
   const [points, setPoints] = useState(0);
   const [lastBonus, setLastBonus] = useState(0);
   const [finished, setFinished] = useState(false);
-  const [answers, setAnswers] = useState<{ q: QuizQuestion; selected: number | null; bonus: number }[]>([]);
+  const [answers, setAnswers] = useState<{ q: QuizQuestion; selected: number | null; bonus: number; secondsTaken: number | null }[]>([]);
   const [timeLeft, setTimeLeft] = useState(TIME_PER_Q);
+  const [earnedBadges, setEarnedBadges] = useState<BadgeId[]>([]);
   const questionStartRef = useRef<number>(Date.now());
 
   const highScores = loadHighScores();
@@ -89,7 +93,7 @@ export default function CumulativePracticePage() {
       const q = questions[current];
       setShowResult(true);
       setSelected(-1);
-      setAnswers((a) => [...a, { q, selected: null, bonus: 0 }]);
+      setAnswers((a) => [...a, { q, selected: null, bonus: 0, secondsTaken: TIME_PER_Q }]);
       return;
     }
     const t = setTimeout(() => setTimeLeft((s) => s - 1), 1000);
@@ -118,6 +122,7 @@ export default function CumulativePracticePage() {
     setLastBonus(0);
     setFinished(false);
     setAnswers([]);
+    setEarnedBadges([]);
     setTimeLeft(TIME_PER_Q);
     questionStartRef.current = Date.now();
   };
@@ -128,11 +133,14 @@ export default function CumulativePracticePage() {
     setShowResult(true);
     const q = questions[current];
     const isCorrect = idx === q.correctIndex;
+    const secondsTaken =
+      mode === "timed"
+        ? TIME_PER_Q - timeLeft
+        : Math.round((Date.now() - questionStartRef.current) / 1000);
     let bonus = 0;
     if (isCorrect) {
       setScore((s) => s + 1);
       if (mode === "timed") {
-        // Bonus scales with remaining time
         bonus = Math.round((timeLeft / TIME_PER_Q) * MAX_BONUS);
         setPoints((p) => p + BASE_POINTS + bonus);
       } else {
@@ -140,7 +148,7 @@ export default function CumulativePracticePage() {
       }
     }
     setLastBonus(bonus);
-    setAnswers((a) => [...a, { q, selected: idx, bonus }]);
+    setAnswers((a) => [...a, { q, selected: idx, bonus, secondsTaken }]);
   };
 
   const handleNext = () => {
@@ -153,6 +161,18 @@ export default function CumulativePracticePage() {
       questionStartRef.current = Date.now();
     } else {
       if (courseId) {
+        const correctTimes = answers
+          .filter((a) => a.selected === a.q.correctIndex && a.secondsTaken !== null)
+          .map((a) => a.secondsTaken as number);
+        const fastestCorrectSeconds = correctTimes.length > 0 ? Math.min(...correctTimes) : null;
+        const badges = computeBadges({
+          mode,
+          correct: score,
+          total: questions.length,
+          points,
+          fastestCorrectSeconds,
+        });
+        setEarnedBadges(badges);
         saveHighScore(courseId, score, questions.length);
         saveToLeaderboard({
           courseId,
@@ -160,6 +180,8 @@ export default function CumulativePracticePage() {
           correct: score,
           total: questions.length,
           points,
+          fastestCorrectSeconds,
+          badges,
         });
       }
       setFinished(true);
@@ -279,6 +301,31 @@ export default function CumulativePracticePage() {
                 </div>
               )}
             </div>
+
+            {/* Earned badges */}
+            {earnedBadges.length > 0 && (
+              <div className="border-t border-secondary pt-6 mb-6">
+                <h3 className="font-semibold text-foreground mb-3 text-center">Achievements Unlocked</h3>
+                <div className="flex flex-wrap justify-center gap-3">
+                  {earnedBadges.map((bid) => {
+                    const b = BADGES[bid];
+                    const Icon = b.icon;
+                    return (
+                      <div
+                        key={bid}
+                        className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border ${b.bgClass}`}
+                      >
+                        <Icon className={`w-5 h-5 ${b.colorClass}`} />
+                        <div className="text-left">
+                          <p className={`text-sm font-bold ${b.colorClass}`}>{b.label}</p>
+                          <p className="text-[11px] text-muted-foreground">{b.description}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             <div className="border-t border-secondary pt-6 mb-6">
               <h3 className="font-semibold text-foreground mb-4">Review Answers</h3>
