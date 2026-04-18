@@ -4,6 +4,7 @@ const navLinks = [
   { label: "Courses", href: "/courses", isRoute: true },
   { label: "Dashboard", href: "/dashboard", isRoute: true },
   { label: "Study Plan", href: "/study-plan", isRoute: true },
+  { label: "Practice", href: "/practice", isRoute: true },
   { label: "Teacher", href: "/teacher", isRoute: true },
 ];
 
