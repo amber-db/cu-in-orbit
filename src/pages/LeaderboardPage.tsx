@@ -4,6 +4,7 @@ import { StarField } from "@/components/StarField";
 import { Button } from "@/components/ui/button";
 import { courses } from "@/data/courseContent";
 import { Trophy, Medal, Award, Timer, Brain, Trash2 } from "lucide-react";
+import { BADGES } from "@/lib/achievements";
 import type { LeaderboardEntry } from "./CumulativePracticePage";
 
 const LEADERBOARD_KEY = "orbit_leaderboard";
@@ -163,7 +164,7 @@ export default function LeaderboardPage() {
                             {RankIcon ? <RankIcon className="w-5 h-5" /> : <span className="font-bold text-sm">{rank}</span>}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 flex-wrap">
                               <span className="font-bold text-foreground tabular-nums">{e.points} pts</span>
                               <span
                                 className={`text-[10px] uppercase font-semibold px-1.5 py-0.5 rounded ${
@@ -174,6 +175,20 @@ export default function LeaderboardPage() {
                               >
                                 {e.mode}
                               </span>
+                              {e.badges?.map((bid) => {
+                                const b = BADGES[bid];
+                                if (!b) return null;
+                                const Icon = b.icon;
+                                return (
+                                  <span
+                                    key={bid}
+                                    title={`${b.label} — ${b.description}`}
+                                    className={`inline-flex items-center justify-center w-5 h-5 rounded-full border ${b.bgClass}`}
+                                  >
+                                    <Icon className={`w-3 h-3 ${b.colorClass}`} />
+                                  </span>
+                                );
+                              })}
                             </div>
                             <p className="text-xs text-muted-foreground">
                               {e.correct}/{e.total} correct · {pct}% · {formatDate(e.date)}
