@@ -1,15 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Navbar } from "@/components/Navbar";
 import { StarField } from "@/components/StarField";
 import { Button } from "@/components/ui/button";
 import { MathText } from "@/components/MathRenderer";
 import { courses } from "@/data/courseContent";
 import { practiceProblems, type PracticeQuestion } from "@/data/practiceProblems";
-import { CheckCircle, XCircle, Brain, RotateCcw, Trophy, Shuffle, ArrowLeft } from "lucide-react";
+import { CheckCircle, XCircle, Brain, RotateCcw, Trophy, Shuffle, ArrowLeft, Timer, Zap } from "lucide-react";
 
 type QuizQuestion = PracticeQuestion & { lessonId: string; lessonTitle: string };
+type Mode = "classic" | "timed";
 
 const STORAGE_KEY = "orbit_cumulative_scores";
+const LEADERBOARD_KEY = "orbit_leaderboard";
+const QUIZ_LENGTH = 10;
+const TIME_PER_Q = 60; // seconds
+const BASE_POINTS = 100;
+const MAX_BONUS = 100; // up to +100 for instant correct answer
+
+export type LeaderboardEntry = {
+  id: string;
+  courseId: string;
+  mode: Mode;
+  correct: number;
+  total: number;
+  points: number;
+  date: string;
+};
 
 function loadHighScores(): Record<string, { best: number; total: number; date: string }> {
   try {
@@ -28,6 +44,17 @@ function saveHighScore(courseId: string, correct: number, total: number) {
   }
 }
 
+function saveToLeaderboard(entry: Omit<LeaderboardEntry, "id" | "date">) {
+  try {
+    const raw = localStorage.getItem(LEADERBOARD_KEY);
+    const list: LeaderboardEntry[] = raw ? JSON.parse(raw) : [];
+    list.push({ ...entry, id: crypto.randomUUID(), date: new Date().toISOString() });
+    // Keep only top 200 most recent across all
+    const trimmed = list.slice(-200);
+    localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(trimmed));
+  } catch {}
+}
+
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -37,21 +64,39 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-const QUIZ_LENGTH = 10;
-
 export default function CumulativePracticePage() {
   const [courseId, setCourseId] = useState<string | null>(null);
+  const [mode, setMode] = useState<Mode>("classic");
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [score, setScore] = useState(0);
+  const [points, setPoints] = useState(0);
+  const [lastBonus, setLastBonus] = useState(0);
   const [finished, setFinished] = useState(false);
-  const [answers, setAnswers] = useState<{ q: QuizQuestion; selected: number }[]>([]);
+  const [answers, setAnswers] = useState<{ q: QuizQuestion; selected: number | null; bonus: number }[]>([]);
+  const [timeLeft, setTimeLeft] = useState(TIME_PER_Q);
+  const questionStartRef = useRef<number>(Date.now());
 
   const highScores = loadHighScores();
 
-  const startQuiz = (id: string) => {
+  // Timer effect for timed mode
+  useEffect(() => {
+    if (mode !== "timed" || !courseId || finished || showResult) return;
+    if (timeLeft <= 0) {
+      // Time's up — auto-submit as wrong
+      const q = questions[current];
+      setShowResult(true);
+      setSelected(-1);
+      setAnswers((a) => [...a, { q, selected: null, bonus: 0 }]);
+      return;
+    }
+    const t = setTimeout(() => setTimeLeft((s) => s - 1), 1000);
+    return () => clearTimeout(t);
+  }, [timeLeft, mode, courseId, finished, showResult, current, questions]);
+
+  const startQuiz = (id: string, m: Mode) => {
     const course = courses[id];
     if (!course) return;
     const pool: QuizQuestion[] = [];
@@ -63,13 +108,18 @@ export default function CumulativePracticePage() {
     );
     const picked = shuffle(pool).slice(0, Math.min(QUIZ_LENGTH, pool.length));
     setCourseId(id);
+    setMode(m);
     setQuestions(picked);
     setCurrent(0);
     setSelected(null);
     setShowResult(false);
     setScore(0);
+    setPoints(0);
+    setLastBonus(0);
     setFinished(false);
     setAnswers([]);
+    setTimeLeft(TIME_PER_Q);
+    questionStartRef.current = Date.now();
   };
 
   const handleSelect = (idx: number) => {
@@ -77,8 +127,20 @@ export default function CumulativePracticePage() {
     setSelected(idx);
     setShowResult(true);
     const q = questions[current];
-    if (idx === q.correctIndex) setScore((s) => s + 1);
-    setAnswers((a) => [...a, { q, selected: idx }]);
+    const isCorrect = idx === q.correctIndex;
+    let bonus = 0;
+    if (isCorrect) {
+      setScore((s) => s + 1);
+      if (mode === "timed") {
+        // Bonus scales with remaining time
+        bonus = Math.round((timeLeft / TIME_PER_Q) * MAX_BONUS);
+        setPoints((p) => p + BASE_POINTS + bonus);
+      } else {
+        setPoints((p) => p + BASE_POINTS);
+      }
+    }
+    setLastBonus(bonus);
+    setAnswers((a) => [...a, { q, selected: idx, bonus }]);
   };
 
   const handleNext = () => {
@@ -86,8 +148,20 @@ export default function CumulativePracticePage() {
       setCurrent((c) => c + 1);
       setSelected(null);
       setShowResult(false);
+      setLastBonus(0);
+      setTimeLeft(TIME_PER_Q);
+      questionStartRef.current = Date.now();
     } else {
-      if (courseId) saveHighScore(courseId, score, questions.length);
+      if (courseId) {
+        saveHighScore(courseId, score, questions.length);
+        saveToLeaderboard({
+          courseId,
+          mode,
+          correct: score,
+          total: questions.length,
+          points,
+        });
+      }
       setFinished(true);
     }
   };
@@ -123,17 +197,15 @@ export default function CumulativePracticePage() {
               );
               const hs = highScores[c.id];
               return (
-                <button
+                <div
                   key={c.id}
-                  onClick={() => startQuiz(c.id)}
-                  disabled={totalQs === 0}
-                  className="card-cosmos rounded-xl p-6 border border-secondary text-left hover:border-cosmos-cyan/60 transition-all disabled:opacity-40 disabled:cursor-not-allowed group"
+                  className="card-cosmos rounded-xl p-6 border border-secondary"
                 >
-                  <h3 className="font-display font-semibold text-xl text-foreground mb-1 group-hover:text-cosmos-cyan transition-colors">
+                  <h3 className="font-display font-semibold text-xl text-foreground mb-1">
                     {c.title}
                   </h3>
                   <p className="text-sm text-muted-foreground mb-3">{c.subtitle}</p>
-                  <div className="flex items-center justify-between text-xs">
+                  <div className="flex items-center justify-between text-xs mb-4">
                     <span className="text-muted-foreground">{totalQs} questions in pool</span>
                     {hs && (
                       <span className="flex items-center gap-1 text-cosmos-gold font-semibold">
@@ -141,9 +213,40 @@ export default function CumulativePracticePage() {
                       </span>
                     )}
                   </div>
-                </button>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="cosmosOutline"
+                      size="sm"
+                      className="flex-1"
+                      disabled={totalQs === 0}
+                      onClick={() => startQuiz(c.id, "classic")}
+                    >
+                      <Brain className="w-3.5 h-3.5 mr-1" /> Classic
+                    </Button>
+                    <Button
+                      variant="cosmosGold"
+                      size="sm"
+                      className="flex-1"
+                      disabled={totalQs === 0}
+                      onClick={() => startQuiz(c.id, "timed")}
+                    >
+                      <Timer className="w-3.5 h-3.5 mr-1" /> Timed
+                    </Button>
+                  </div>
+                </div>
               );
             })}
+          </div>
+
+          <div className="mt-8 card-cosmos rounded-xl p-5 border border-secondary text-sm text-muted-foreground">
+            <p className="flex items-start gap-2">
+              <Zap className="w-4 h-4 text-cosmos-gold mt-0.5 flex-shrink-0" />
+              <span>
+                <strong className="text-foreground">Timed mode:</strong> {TIME_PER_Q} seconds per question.
+                Earn {BASE_POINTS} points for each correct answer plus up to +{MAX_BONUS} bonus points
+                based on how quickly you respond.
+              </span>
+            </p>
           </div>
         </div>
       </div>
@@ -165,10 +268,16 @@ export default function CumulativePracticePage() {
               <h2 className="font-display font-bold text-3xl text-foreground mb-2">
                 {passed ? "Excellent Work!" : "Keep Practicing"}
               </h2>
-              <p className="text-5xl font-bold text-cosmos-cyan mb-2">
+              <p className="text-5xl font-bold text-cosmos-cyan mb-1">
                 {score}/{questions.length}
               </p>
-              <p className="text-muted-foreground">{pct}% correct</p>
+              <p className="text-muted-foreground mb-3">{pct}% correct</p>
+              {mode === "timed" && (
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cosmos-gold/10 border border-cosmos-gold/30">
+                  <Zap className="w-4 h-4 text-cosmos-gold" />
+                  <span className="font-bold text-cosmos-gold">{points} points</span>
+                </div>
+              )}
             </div>
 
             <div className="border-t border-secondary pt-6 mb-6">
@@ -188,7 +297,12 @@ export default function CumulativePracticePage() {
                           <XCircle className="w-4 h-4 text-red-400 mt-0.5 flex-shrink-0" />
                         )}
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs text-muted-foreground mb-1">{a.q.lessonTitle}</p>
+                          <div className="flex items-center gap-2 mb-1">
+                            <p className="text-xs text-muted-foreground">{a.q.lessonTitle}</p>
+                            {correct && a.bonus > 0 && (
+                              <span className="text-xs text-cosmos-gold font-semibold">+{a.bonus} bonus</span>
+                            )}
+                          </div>
                           <div className="text-foreground">
                             <MathText text={a.q.question} />
                           </div>
@@ -205,12 +319,12 @@ export default function CumulativePracticePage() {
               </div>
             </div>
 
-            <div className="flex gap-3 justify-center">
+            <div className="flex flex-wrap gap-3 justify-center">
               <Button variant="cosmosOutline" onClick={handleReset}>
                 <ArrowLeft className="w-4 h-4 mr-1.5" /> Choose Course
               </Button>
-              <Button variant="cosmos" onClick={() => courseId && startQuiz(courseId)}>
-                <RotateCcw className="w-4 h-4 mr-1.5" /> Retake Quiz
+              <Button variant="cosmos" onClick={() => courseId && startQuiz(courseId, mode)}>
+                <RotateCcw className="w-4 h-4 mr-1.5" /> Retake ({mode})
               </Button>
             </div>
           </div>
@@ -222,6 +336,7 @@ export default function CumulativePracticePage() {
   // ── Quiz In Progress ──
   const q = questions[current];
   const isCorrect = selected === q.correctIndex;
+  const timedOut = mode === "timed" && timeLeft <= 0 && selected === -1;
 
   return (
     <div className="min-h-screen bg-background relative">
@@ -236,17 +351,25 @@ export default function CumulativePracticePage() {
         </button>
 
         <div className="card-cosmos rounded-xl p-6 md:p-8 border border-secondary">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
             <h2 className="font-display font-semibold text-lg text-foreground flex items-center gap-2">
-              <Brain className="w-5 h-5 text-cosmos-cyan" />
-              {courses[courseId].title} · Cumulative
+              {mode === "timed" ? <Timer className="w-5 h-5 text-cosmos-gold" /> : <Brain className="w-5 h-5 text-cosmos-cyan" />}
+              {courses[courseId].title} · {mode === "timed" ? "Timed" : "Classic"}
             </h2>
-            <span className="text-xs text-muted-foreground font-medium">
-              {current + 1} / {questions.length} · Score: {score}
-            </span>
+            <div className="flex items-center gap-3 text-xs font-medium">
+              <span className="text-muted-foreground">
+                {current + 1}/{questions.length}
+              </span>
+              <span className="text-muted-foreground">Score: {score}</span>
+              {mode === "timed" && (
+                <span className="text-cosmos-gold font-bold flex items-center gap-1">
+                  <Zap className="w-3 h-3" /> {points} pts
+                </span>
+              )}
+            </div>
           </div>
 
-          <div className="flex gap-1.5 mb-5">
+          <div className="flex gap-1.5 mb-4">
             {questions.map((_, i) => (
               <div
                 key={i}
@@ -256,6 +379,32 @@ export default function CumulativePracticePage() {
               />
             ))}
           </div>
+
+          {/* Timer bar */}
+          {mode === "timed" && !showResult && (
+            <div className="mb-5">
+              <div className="flex items-center justify-between text-xs mb-1.5">
+                <span className="text-muted-foreground flex items-center gap-1">
+                  <Timer className="w-3 h-3" /> Time remaining
+                </span>
+                <span
+                  className={`font-bold tabular-nums ${
+                    timeLeft <= 10 ? "text-red-400" : timeLeft <= 30 ? "text-cosmos-gold" : "text-cosmos-cyan"
+                  }`}
+                >
+                  {timeLeft}s
+                </span>
+              </div>
+              <div className="h-2 bg-secondary rounded-full overflow-hidden">
+                <div
+                  className={`h-full transition-all duration-1000 ease-linear ${
+                    timeLeft <= 10 ? "bg-red-500" : timeLeft <= 30 ? "bg-cosmos-gold" : "bg-cosmos-cyan"
+                  }`}
+                  style={{ width: `${(timeLeft / TIME_PER_Q) * 100}%` }}
+                />
+              </div>
+            </div>
+          )}
 
           <p className="text-xs text-cosmos-gold mb-2 font-medium">From: {q.lessonTitle}</p>
           <div className="mb-5">
@@ -308,9 +457,16 @@ export default function CumulativePracticePage() {
             <div
               className={`rounded-lg p-4 mb-4 text-sm border ${isCorrect ? "border-green-500/30 bg-green-500/5" : "border-red-500/30 bg-red-500/5"}`}
             >
-              <p className={`font-semibold mb-1 ${isCorrect ? "text-green-400" : "text-red-400"}`}>
-                {isCorrect ? "✓ Correct!" : "✗ Incorrect"}
-              </p>
+              <div className="flex items-center justify-between mb-1">
+                <p className={`font-semibold ${isCorrect ? "text-green-400" : "text-red-400"}`}>
+                  {timedOut ? "⏱ Time's Up!" : isCorrect ? "✓ Correct!" : "✗ Incorrect"}
+                </p>
+                {isCorrect && mode === "timed" && lastBonus > 0 && (
+                  <span className="text-xs font-bold text-cosmos-gold flex items-center gap-1">
+                    <Zap className="w-3 h-3" /> +{BASE_POINTS} +{lastBonus} bonus
+                  </span>
+                )}
+              </div>
               <p className="text-muted-foreground">
                 <MathText text={q.explanation} />
               </p>

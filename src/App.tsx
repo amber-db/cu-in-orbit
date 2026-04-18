@@ -11,6 +11,7 @@ import DiagnosticQuizPage from "./pages/DiagnosticQuizPage";
 import TeacherDashboardPage from "./pages/TeacherDashboardPage";
 import StudyPlanPage from "./pages/StudyPlanPage";
 import CumulativePracticePage from "./pages/CumulativePracticePage";
+import LeaderboardPage from "./pages/LeaderboardPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/teacher" element={<TeacherDashboardPage />} />
           <Route path="/study-plan" element={<StudyPlanPage />} />
           <Route path="/practice" element={<CumulativePracticePage />} />
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
