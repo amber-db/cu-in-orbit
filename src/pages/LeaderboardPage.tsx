@@ -69,6 +69,27 @@ export default function LeaderboardPage() {
           </p>
         </div>
 
+        {/* Achievements legend */}
+        <div className="card-cosmos rounded-xl p-5 border border-secondary mb-6">
+          <h3 className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-3">
+            Achievements
+          </h3>
+          <div className="grid sm:grid-cols-3 gap-3">
+            {Object.values(BADGES).map((b) => {
+              const Icon = b.icon;
+              return (
+                <div key={b.id} className={`flex items-start gap-2.5 p-2.5 rounded-lg border ${b.bgClass}`}>
+                  <Icon className={`w-5 h-5 ${b.colorClass} flex-shrink-0 mt-0.5`} />
+                  <div>
+                    <p className={`text-sm font-bold ${b.colorClass}`}>{b.label}</p>
+                    <p className="text-[11px] text-muted-foreground leading-tight">{b.description}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Filter & actions */}
         <div className="flex flex-wrap items-center justify-between gap-3 mb-8">
           <div className="flex gap-2">
